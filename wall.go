@@ -15,7 +15,7 @@ type wallData struct {
 }
 
 func (w *wallData) move() {
-	w.wallX -= 8
+	w.wallX -= 1
 }
 
 func (w *wallData) draw() {
