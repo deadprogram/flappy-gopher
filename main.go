@@ -38,9 +38,13 @@ func boot() {
 func update() {
 	switch scene {
 	case "title":
-		buttons = firefly.ReadButtons(firefly.GetMe())
-		if buttons.N || buttons.S || buttons.E || buttons.W {
-			scene = "game"
+		frames += 1
+		if frames > 60 {
+			buttons = firefly.ReadButtons(firefly.GetMe())
+			if buttons.N || buttons.S || buttons.E || buttons.W {
+				scene = "game"
+				frames = 0
+			}
 		}
 	case "game":
 		updateGame()
@@ -71,7 +75,8 @@ func render() {
 
 func renderTitle() {
 	firefly.ClearScreen(firefly.ColorBlue)
-	firefly.DrawText("Press any button to Start", titleFont, firefly.Point{X: 100, Y: 100}, firefly.ColorWhite)
+	firefly.DrawText("FLAPPY GOPHER", titleFont, firefly.Point{X: 80, Y: 60}, firefly.ColorWhite)
+	firefly.DrawText("Press any button to Start", titleFont, firefly.Point{X: 44, Y: 100}, firefly.ColorWhite)
 }
 
 func renderGame() {
@@ -93,8 +98,8 @@ func renderGameover() {
 		wall.draw()
 	}
 
-	firefly.DrawText("GAME OVER", titleFont, firefly.Point{X: 100, Y: 100}, firefly.ColorWhite)
-	firefly.DrawText("Score: "+strconv.Itoa(score), titleFont, firefly.Point{X: 100, Y: 120}, firefly.ColorWhite)
+	firefly.DrawText("GAME OVER", titleFont, firefly.Point{X: 90, Y: 60}, firefly.ColorWhite)
+	firefly.DrawText("Score: "+strconv.Itoa(score), titleFont, firefly.Point{X: 90, Y: 100}, firefly.ColorWhite)
 }
 
 func updateGame() {
