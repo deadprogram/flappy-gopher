@@ -5,8 +5,8 @@ import "github.com/firefly-zero/firefly-go/firefly"
 const (
 	wallWidth  = 8   // 壁の幅
 	wallHeight = 128 // 壁の高さ
-	holeYMax   = 48  // 穴のY座標の最大値
-	holeHeight = 40  // 穴のサイズ（高さ）
+	holeYMax   = 72  // 穴のY座標の最大値
+	holeHeight = 64  // 穴のサイズ（高さ）
 )
 
 type wallData struct {
