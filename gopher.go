@@ -6,7 +6,7 @@ const (
 	gopherWidth  = 24
 	gopherHeight = 24
 
-	g    = 0.25 // Gravity (重力加速度) の略
+	g    = 0.05 // Gravity (重力加速度) の略
 	jump = -1.0 // ジャンプ力
 )
 

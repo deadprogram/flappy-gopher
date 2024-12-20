@@ -8,12 +8,10 @@ import (
 )
 
 var (
-	frames               = 0             // 経過フレーム数
-	moveInterval         = 5             // 壁の追加間隔
-	newWallsInterval     = 200           // 新しい壁を追加する間隔
-	wallMovementInterval = 10            // 壁の移動量
-	wallStartX           = 240           // 壁の初期X座標
-	walls                = []*wallData{} // 壁のX座標とY座標
+	frames           = 0             // 経過フレーム数
+	newWallsInterval = 200           // 新しい壁を追加する間隔
+	wallStartX       = 240           // 壁の初期X座標
+	walls            = []*wallData{} // 壁のX座標とY座標
 
 	scene = "title"
 	score = 0
@@ -121,39 +119,38 @@ func updateGame() {
 		}
 	}
 
-	if frames%wallMovementInterval == 0 {
-		for _, wall := range walls {
+	for _, wall := range walls {
+		wall.move()
+		if frames%5 == 0 {
 			wall.move()
 		}
 	}
 
-	if frames%moveInterval == 0 {
-		gopher.move()
+	gopher.move()
 
-		for _, wall := range walls {
-			// 上の壁を表す四角形を作る
-			bLeft, bTop, bRight, bBottom := wall.top()
+	for _, wall := range walls {
+		// 上の壁を表す四角形を作る
+		bLeft, bTop, bRight, bBottom := wall.top()
 
-			// 上の壁との当たり判定
-			if gopher.isHit(bLeft, bTop, bRight, bBottom) {
-				scene = "gameover"
-			}
+		// 上の壁との当たり判定
+		if gopher.isHit(bLeft, bTop, bRight, bBottom) {
+			scene = "gameover"
+		}
 
-			// 下の壁を表す四角形を作る
-			bLeft, bTop, bRight, bBottom = wall.bottom()
+		// 下の壁を表す四角形を作る
+		bLeft, bTop, bRight, bBottom = wall.bottom()
 
-			// 下の壁との当たり判定
-			if gopher.isHit(bLeft, bTop, bRight, bBottom) {
-				scene = "gameover"
-			}
+		// 下の壁との当たり判定
+		if gopher.isHit(bLeft, bTop, bRight, bBottom) {
+			scene = "gameover"
+		}
 
-			_, t, _, b := gopher.position()
-			if t < 0 {
-				scene = "gameover"
-			}
-			if b > 160 {
-				scene = "gameover"
-			}
+		_, t, _, b := gopher.position()
+		if t < 0 {
+			scene = "gameover"
+		}
+		if b > 160 {
+			scene = "gameover"
 		}
 	}
 }
