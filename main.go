@@ -121,7 +121,7 @@ func updateGame() {
 
 	for _, wall := range walls {
 		wall.move()
-		if frames%5 == 0 {
+		if frames%4 == 0 {
 			wall.move()
 		}
 	}
