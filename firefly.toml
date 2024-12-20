@@ -1,0 +1,9 @@
+author_id = "ron"
+app_id = "flappy-gopher"
+author_name = "Ron"
+app_name = "Flappy Gopher"
+
+[files]
+font = { path = "font.fff", url = "https://fonts.fireflyzero.com/fonts/ascii/eg_6x10.fff" }
+gopher = { path = "gopher.png" }
+wall = { path = "wall.png" }
