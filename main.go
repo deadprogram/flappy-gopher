@@ -1,24 +1,19 @@
 package main
 
 import (
-	rand "math/rand/v2"
 	"strconv"
 
 	"github.com/firefly-zero/firefly-go/firefly"
 )
 
 var (
-	frames           = 0             // 経過フレーム数
-	newWallsInterval = 200           // 新しい壁を追加する間隔
-	wallStartX       = 240           // 壁の初期X座標
-	walls            = []*wallData{} // 壁のX座標とY座標
-
-	scene = "title"
-	score = 0
+	frames = 0 // 経過フレーム数
+	scene  = "title"
+	score  = 0
 
 	titleFont firefly.Font
 	gopher    *gopherData
-	wallImage firefly.Image
+	walls     *wallsData
 
 	buttons firefly.Buttons
 )
@@ -32,7 +27,7 @@ func init() {
 func boot() {
 	titleFont = firefly.LoadFile("font").Font()
 	gopher = newGopher()
-	wallImage = firefly.LoadFile("wall").Image()
+	walls = newWalls()
 }
 
 func update() {
@@ -57,7 +52,7 @@ func update() {
 			frames = 0
 
 			gopher.reset()
-			walls = []*wallData{}
+			walls.reset()
 		}
 	}
 }
@@ -81,22 +76,18 @@ func renderTitle() {
 
 func renderGame() {
 	firefly.ClearScreen(firefly.ColorWhite)
-	firefly.DrawText("Score: "+strconv.Itoa(score), titleFont, firefly.Point{X: 10, Y: 10}, firefly.ColorDarkBlue)
 
 	gopher.draw()
+	walls.draw()
 
-	for _, wall := range walls {
-		wall.draw()
-	}
+	firefly.DrawText("Score: "+strconv.Itoa(score), titleFont, firefly.Point{X: 10, Y: 10}, firefly.ColorDarkBlue)
 }
 
 func renderGameover() {
 	firefly.ClearScreen(firefly.ColorBlue)
-	gopher.draw()
 
-	for _, wall := range walls {
-		wall.draw()
-	}
+	gopher.draw()
+	walls.draw()
 
 	firefly.DrawText("GAME OVER", titleFont, firefly.Point{X: 90, Y: 60}, firefly.ColorWhite)
 	firefly.DrawText("Score: "+strconv.Itoa(score), titleFont, firefly.Point{X: 90, Y: 100}, firefly.ColorWhite)
@@ -112,51 +103,22 @@ func updateGame() {
 
 	// add walls
 	if frames%newWallsInterval == 0 {
-		wall := &wallData{wallStartX, rand.N(holeYMax)}
-		walls = append(walls, wall)
+		walls.add()
 	}
 
 	// current score
-	l, _, _, _ := gopher.position()
-	for i, wall := range walls {
-		if wall.wallX < int(l) {
-			score = i + 1
-		}
-	}
-
-	for _, wall := range walls {
-		wall.move()
-		if frames%4 == 0 {
-			wall.move()
-		}
-	}
+	score = gopher.score(walls)
 
 	gopher.move()
+	walls.move()
 
-	for _, wall := range walls {
-		// 上の壁を表す四角形を作る
-		bLeft, bTop, bRight, bBottom := wall.top()
-
-		// 上の壁との当たり判定
-		if gopher.isHit(bLeft, bTop, bRight, bBottom) {
-			scene = "gameover"
-		}
-
-		// 下の壁を表す四角形を作る
-		bLeft, bTop, bRight, bBottom = wall.bottom()
-
-		// 下の壁との当たり判定
-		if gopher.isHit(bLeft, bTop, bRight, bBottom) {
-			scene = "gameover"
-		}
-
-		_, t, _, b := gopher.position()
-		if t < 0 {
-			scene = "gameover"
-		}
-		if b > 160 {
-			scene = "gameover"
-		}
+	switch {
+	case gopher.hitWalls(walls):
+		scene = "gameover"
+	case gopher.hitBottom():
+		scene = "gameover"
+	case gopher.hitTop():
+		scene = "gameover"
 	}
 }
 

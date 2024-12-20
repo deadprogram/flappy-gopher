@@ -67,3 +67,39 @@ func (gd *gopherData) isHit(wl, wt, wr, wb int) bool {
 
 	return true
 }
+
+func (gd *gopherData) hitWalls(w *wallsData) bool {
+	for _, wall := range w.walls {
+		// 上の壁を表す四角形を作る
+		bLeft, bTop, bRight, bBottom := wall.top()
+
+		// 上の壁との当たり判定
+		if gd.isHit(bLeft, bTop, bRight, bBottom) {
+			return true
+		}
+
+		// 下の壁を表す四角形を作る
+		bLeft, bTop, bRight, bBottom = wall.bottom()
+
+		// 下の壁との当たり判定
+		if gopher.isHit(bLeft, bTop, bRight, bBottom) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (gd *gopherData) hitTop() bool {
+	return gd.y < 0
+}
+
+func (gd *gopherData) hitBottom() bool {
+	b := int(gd.y) + gopherHeight
+	return b > 160
+}
+
+func (gd *gopherData) score(w *wallsData) int {
+	l, _, _, _ := gd.position()
+	return w.score(l)
+}
