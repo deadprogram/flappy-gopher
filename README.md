@@ -27,13 +27,21 @@ The game has three different modes:
 - `play` - while the game is being played
 - `gameover` - after the game has ended
 
-As such, there is an `updateStart()` function and a `renderStart()` function for the `start` mode. Likewise, there is a `updatePlay()` function and a `renderPlay()` function for the `play` mode. And of course an `updateGameover()` function and a `renderGameover()` function for the `gameover` mode
+As such, there is an `updateStart()` function and a `renderStart()` function for the `start` mode.
+
+Likewise, there is a `updatePlay()` function and a `renderPlay()` function for the `play` mode.
+
+And of course an `updateGameover()` function and a `renderGameover()` function for the `gameover` mode
 
 ## Game models
 
 The game has 2 different things that are involved with the game play. One is the `gopher` that the player is controlling. There is a `gopher` type that represents the player.
 
 The other are the `walls` that the player is trying to have the `gopher` avoid crashing into. There is a `walls` type for managing all of the walls, and then a separate `wall` type for each individual wall.
+
+## Architecture diagram
+
+This diagram shows the relationship between the different game functions, game modes, and the game models.
 
 ```mermaid
 
@@ -44,16 +52,16 @@ flowchart TD
     A --> R{render}
     end
     subgraph start
-    U -->|start| US[updateStart]
-    R -->|start| RS[renderStart]
+    U -->|update| US[updateStart]
+    R -->|render| RS[renderStart]
     end
     subgraph play
-    U -->|play| UP[updatePlay]
-    R -->|play| RP[renderPlay]
+    U -->|update| UP[updatePlay]
+    R -->|render| RP[renderPlay]
     end
     subgraph gameover
-    U -->|gameover| UG[updateGameover]
-    R -->|gameover| RO[renderGameover]
+    U -->|update| UG[updateGameover]
+    R -->|render| RO[renderGameover]
     end
     subgraph models
     US --> G(gopher)
