@@ -6,7 +6,7 @@ import "github.com/firefly-zero/firefly-go/firefly"
 func updateStart() {
 	frames += 1
 	if frames > 60 {
-		buttons = firefly.ReadButtons(firefly.GetMe())
+		buttons = firefly.ReadButtons(firefly.Combined)
 		if buttons.N || buttons.S || buttons.E || buttons.W {
 			frames = 0
 			scene = gamePlay

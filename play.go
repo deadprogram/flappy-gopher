@@ -10,7 +10,7 @@ import (
 func updatePlay() {
 	frames += 1
 
-	buttons = firefly.ReadButtons(firefly.GetMe())
+	buttons = firefly.ReadButtons(firefly.Combined)
 	if buttons.N || buttons.S || buttons.E || buttons.W {
 		gopher.jump()
 	}

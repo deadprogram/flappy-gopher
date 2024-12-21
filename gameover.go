@@ -7,7 +7,7 @@ import (
 )
 
 func updateGameover() {
-	buttons = firefly.ReadButtons(firefly.GetMe())
+	buttons = firefly.ReadButtons(firefly.Combined)
 	if buttons.N || buttons.S || buttons.E || buttons.W {
 		scene = gameStart
 		score = 0
