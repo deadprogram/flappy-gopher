@@ -1,8 +1,6 @@
 package main
 
 import (
-	rand "math/rand/v2"
-
 	"github.com/firefly-zero/firefly-go/firefly"
 )
 
@@ -15,72 +13,27 @@ const (
 	wallStartX       = 240 // 壁の初期X座標
 )
 
-var (
-	wallImage firefly.Image
-)
-
-func newWalls() *wallsData {
-	wallImage = firefly.LoadFile("wall").Image()
-	return &wallsData{
-		walls: []*wallData{},
-	}
-}
-
-type wallsData struct {
-	walls []*wallData
-}
-
-func (w *wallsData) reset() {
-	w.walls = []*wallData{}
-}
-
-func (w *wallsData) draw() {
-	for _, wall := range w.walls {
-		wall.draw()
-	}
-}
-
-func (w *wallsData) score(l int) int {
-	score := 0
-	for i, wall := range w.walls {
-		if wall.wallX < int(l) {
-			score = i + 1
-		}
-	}
-	return score
-}
-
-func (w *wallsData) move() {
-	for _, wall := range w.walls {
-		wall.move()
-		if frames%4 == 0 {
-			wall.move()
-		}
-	}
-}
-
-func (w *wallsData) add() {
-	wall := &wallData{wallStartX, rand.N(holeYMax)}
-	w.walls = append(w.walls, wall)
-}
-
+// wallData represents a single wall
 type wallData struct {
 	wallX int
 	holeY int
 }
 
+// move moves the wall to the left
 func (w *wallData) move() {
 	w.wallX -= 1
 }
 
+// draw draws the wall
 func (w *wallData) draw() {
-	// 上の壁の描画
+	// draw the top wall
 	firefly.DrawImage(wallImage, firefly.Point{X: w.wallX, Y: w.holeY - wallHeight})
 
-	// 下の壁の描画
+	// draw the bottom wall
 	firefly.DrawImage(wallImage, firefly.Point{X: w.wallX, Y: w.holeY + holeHeight})
 }
 
+// top returns the wall's top coordinates
 func (w *wallData) top() (int, int, int, int) {
 	l := w.wallX
 	t := w.holeY - wallHeight
@@ -90,6 +43,7 @@ func (w *wallData) top() (int, int, int, int) {
 	return l, t, r, b
 }
 
+// bottom returns the wall's bottom coordinates
 func (w *wallData) bottom() (int, int, int, int) {
 	l := w.wallX
 	t := w.holeY + holeHeight
