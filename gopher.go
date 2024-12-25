@@ -21,7 +21,7 @@ type gopherData struct {
 // newGopher creates a new gopher
 func newGopher() *gopherData {
 	return &gopherData{
-		img: firefly.LoadFile("gopher").Image(),
+		img: firefly.LoadFile("gopher", nil).Image(),
 		x:   20,
 		y:   100,
 		vy:  0,
