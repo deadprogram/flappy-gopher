@@ -29,7 +29,7 @@ func init() {
 }
 
 func boot() {
-	titleFont = firefly.LoadFile("font").Font()
+	titleFont = firefly.LoadFile("font", nil).Font()
 	gopher = newGopher()
 	walls = newWalls()
 }

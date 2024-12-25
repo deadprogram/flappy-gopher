@@ -16,7 +16,7 @@ type wallsData struct {
 }
 
 func newWalls() *wallsData {
-	wallImage = firefly.LoadFile("wall").Image()
+	wallImage = firefly.LoadFile("wall", nil).Image()
 	return &wallsData{
 		walls: []*wallData{},
 	}
